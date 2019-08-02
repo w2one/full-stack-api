@@ -8,7 +8,7 @@ import config from "../config";
 // const accessKey = "";
 // const secretKey = "";
 // const bucket = "";
-const { accessKey, secretKey, bucket } = config;
+const { accessKey, secretKey, bucket } = config.qiniu;
 
 const mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
 
