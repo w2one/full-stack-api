@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>upload</title>
+  </head>
+  <body>
+    upload
+    <input type="file" id="file" multiple webkitdirectory />
+    <button id="btn">upload</button>
+    <script>
+      console.log("test");
+      const file = document.querySelector("#file");
+      const btn = document.querySelector("#btn");
+      btn.addEventListener("click", () => {
+        console.log("btn");
+        console.log(file.value);
+
+        console.log(file.files);
+        return;
+        const data = new FormData();
+        // data.append("file", file.files[0]);
+        data.append("file", file.files[0]);
+        console.log(file.files[0].name);
+        // key: hello.jpeg
+        // fname: hello.jpeg
+        // x:name: hello
+        data.append("key", "201977/" + file.files[0].name);
+        data.append("fname", file.files[0].name);
+        data.append(
+          "token",
+          "1bOVTIgSrz9RUM_hGlskZhCBs6I-1SB1RiE78Vep:nkwWv55M943XTQW_WBMOEjtJLFs=:eyJzY29wZSI6InNjb3JwaW9uamF5IiwiZGVhZGxpbmUiOjE1NjI1MDY4Mjl9"
+        );
+        // data.append('user', 'hubot')
+        // form.append("file", file.value);
+        fetch("http://up-z0.qiniup.com", {
+          method: "post",
+          body: data
+        })
+          .then(function(response) {
+            return response.json();
+          })
+          .then(response => response.json())
+          .catch(error => console.error("Error:", error))
+          .then(response => console.log("Success:", response));
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0,user-scalable=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="swiper.min.css"
+    />
+    <link rel="stylesheet" href="animate.css" />
+    <title>Show</title>
+    <script src="swiper.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+      }
+      body{
+        background: #162a5e;
+      }
+      .swiper-slide {
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: 62%;
+        /* display: flex;
+        justify-content: center;
+        align-items: center; */
+        color: #fff;
+      }
+      .swiper-slide>div{
+        position: absolute;
+      }
+
+      .swiper-container {
+        width: 100vw;
+        height: 100vh;
+      }
+      .next {
+        width: 30px;
+        height: 30px;
+        /* background-color: #fff; */
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        margin-left: -15px;
+        text-align: center;
+        line-height: 30px;
+        z-index: 2019;
+        border-radius: 100%;
+        border: 2px solid #fff;
+        animation: start 1.5s ease-in-out infinite;
+      }
+      .next > i {
+        display: inline-block;
+        border-bottom: 2px solid #fff;
+        border-left: 2px solid #fff;
+        width: 12px;
+        height: 12px;
+        -webkit-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+      }
+      @keyframes start {
+        0% {
+          -webkit-transform: translateY(-3px);
+          transform: translateY(-3px);
+        }
+
+        50% {
+          -webkit-transform: translateY(5px);
+          transform: translateY(5px);
+        }
+
+        to {
+          -webkit-transform: translateY(-3px);
+          transform: translateY(-3px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"></div>
+        </div>
+
+        <div class="next"><i></i></div>
+
+        <!-- 如果需要分页器 -->
+        <!-- <div class="swiper-pagination"></div> -->
+
+        <!-- 如果需要导航按钮 -->
+        <!-- <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div> -->
+
+        <!-- 如果需要滚动条 -->
+        <!-- <div class="swiper-scrollbar"></div> -->
+      </div>
+    </div>
+  </body>
+  <script>
+    function getQueryString(name) {
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+      var r = window.location.search.substr(1).match(reg);
+      if (r != null) return unescape(r[2]);
+      return "";
+    }
+
+    fetch(`show/${getQueryString("id")}`)
+      .then(response => response.json())
+      .then(data => {
+        const container = document.querySelector(".swiper-wrapper");
+
+        if (data.code === 0) {
+          let str = "";
+          data.data.images.forEach(
+            item =>
+              (str += `<div class="swiper-slide" style='background-image:url("${
+                item.image
+              }")'>
+              <div class="ani" 
+                style="left:30%; top: 30%;"
+                swiper-animate-effect="fadeInDown"
+                swiper-animate-duration="1s"
+                swiper-animate-delay="0.4s"
+              >${item.title}</div>
+              </div>`)
+          );
+          container.innerHTML = str;
+          var mySwiper = new Swiper(".swiper-container", {
+            direction: "vertical", // 垂直切换选项
+            loop: true, // 循环模式选项
+            // effect: "fade", // 切换效果
+
+            // 如果需要分页器
+            // pagination: {
+            //   el: ".swiper-pagination"
+            // },
+
+            // 如果需要前进后退按钮
+            navigation: {
+              nextEl: ".next",
+              prevEl: ".swiper-button-prev"
+            },
+
+            // 如果需要滚动条
+            scrollbar: {
+              el: ".swiper-scrollbar"
+            },
+            on: {
+              init: function() {
+                swiperAnimateCache(this); //隐藏动画元素
+                swiperAnimate(this); //初始化完成开始动画
+              },
+              // slideChange: function() {
+              //   if (this.isEnd) {
+              //     this.navigation.$nextEl.css("display", "none");
+              //   } else {
+              //     this.navigation.$nextEl.css("display", "block");
+              //   }
+              // },
+              slideChangeTransitionEnd: function() {
+                swiperAnimate(this);
+              }
+            }
+          });
+        }
+      });
+
+    function swiperAnimateCache(a) {
+      for (var j = 0; j < a.slides.length; j++)
+        for (
+          var allBoxes = a.slides[j].querySelectorAll(".ani"), i = 0;
+          i < allBoxes.length;
+          i++
+        )
+          allBoxes[i].attributes["style"]
+            ? allBoxes[i].setAttribute(
+                "swiper-animate-style-cache",
+                allBoxes[i].attributes["style"].value
+              )
+            : allBoxes[i].setAttribute("swiper-animate-style-cache", " "),
+            (allBoxes[i].style.visibility = "hidden");
+    }
+    function swiperAnimate(a) {
+      clearSwiperAnimate(a);
+      var b = a.slides[a.activeIndex].querySelectorAll(".ani");
+      var effect, style, duration, delay;
+      for (var i = 0; i < b.length; i++)
+        (b[i].style.visibility = "visible"),
+          (effect = b[i].attributes["swiper-animate-effect"]
+            ? b[i].attributes["swiper-animate-effect"].value
+            : ""),
+          (b[i].className = b[i].className + "  " + effect + " " + "animated"),
+          (style = b[i].attributes["style"].value),
+          (duration = b[i].attributes["swiper-animate-duration"]
+            ? b[i].attributes["swiper-animate-duration"].value
+            : ""),
+          duration &&
+            (style =
+              style +
+              "animation-duration:" +
+              duration +
+              ";-webkit-animation-duration:" +
+              duration +
+              ";"),
+          (delay = b[i].attributes["swiper-animate-delay"]
+            ? b[i].attributes["swiper-animate-delay"].value
+            : ""),
+          delay &&
+            (style =
+              style +
+              "animation-delay:" +
+              delay +
+              ";-webkit-animation-delay:" +
+              delay +
+              ";"),
+          b[i].setAttribute("style", style);
+    }
+    function clearSwiperAnimate(a) {
+      var effect;
+      for (var j = 0; j < a.slides.length; j++)
+        for (
+          var allBoxes = a.slides[j].querySelectorAll(".ani"), i = 0;
+          i < allBoxes.length;
+          i++
+        )
+          allBoxes[i].attributes["swiper-animate-style-cache"] &&
+            allBoxes[i].setAttribute(
+              "style",
+              allBoxes[i].attributes["swiper-animate-style-cache"].value
+            ),
+            (allBoxes[i].style.visibility = "hidden"),
+            (allBoxes[i].className = allBoxes[i].className.replace(
+              "animated",
+              " "
+            )),
+            allBoxes[i].attributes["swiper-animate-effect"] &&
+              ((effect = allBoxes[i].attributes["swiper-animate-effect"].value),
+              (allBoxes[i].className = allBoxes[i].className.replace(
+                effect,
+                " "
+              )));
+    }
+  </script>
+</html>
