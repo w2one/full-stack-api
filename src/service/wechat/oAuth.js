@@ -57,7 +57,7 @@ export const requestAuthUserinfo = async (ACCESS_TOKEN, OPENID) =>
         console.log(body);
         if (!error && response.statusCode == 200) {
           try {
-            resolve(body);
+            resolve(JSON.parse(body));
           } catch (e) {
             reject(e);
           }
