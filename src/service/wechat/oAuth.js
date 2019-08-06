@@ -14,8 +14,8 @@ export const requestOauth2Access_token = async code =>
     let url =
       "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
     url = url
-      .replace("APPID", config.appId)
-      .replace("SECRET", config.appSecret)
+      .replace("APPID", config.wechat.appId)
+      .replace("SECRET", config.wechat.appSecret)
       .replace("CODE", code);
 
     request(
