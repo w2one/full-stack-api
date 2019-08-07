@@ -6,8 +6,9 @@ const Koa = require("koa");
 import KoaStatic from "koa-static";
 import Router from "koa-router";
 import bodyParser from "koa-bodyparser";
-
 import { verify } from "./utils/token";
+import R from  "ramda"
+
 
 const app = new Koa();
 
@@ -28,11 +29,27 @@ import GraphqlRouter from "./router";
 import wechatRouter from "./controller/wechat";
 import analyticsRouter from "./controller/analytics";
 import bannerRouter from "./controller/banner";
+const resolve = require("path").resolve
+
 
 const router = new Router();
 
 app.use(bodyParser());
 app.use(KoaStatic(__dirname + "/public"));
+
+const requirePath = path => resolve(__dirname,path)
+const MIDDLEWARES = ["router"]
+
+const useMiddleWares = R.map(
+  R.compose(
+    R.map(i=>i(app)),
+    require,
+    i => `${requirePath('./middlewares')}/${i}`
+  )
+)
+useMiddleWares(MIDDLEWARES) 
+
+
 
 router.get("/test", (ctx, next) => {
   ctx.body = "test page";
