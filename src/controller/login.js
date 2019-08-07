@@ -46,6 +46,13 @@ export async function wechatLogin(ctx) {
   const data = await requestOauth2Access_token(code);
   // console.log('data',JSON.stringify(data))
   const { access_token, openid } = JSON.parse(data);
+
+  if (!openid) {
+    ctx.throw({
+      statusCode: 200,
+      message: "缺少openId"
+    });
+  }
   console.log("xxxxxx", access_token, openid);
   //第四步：拉取用户信息(需scope为 snsapi_userinfo)
   const userInfo = await requestAuthUserinfo(access_token, openid);
