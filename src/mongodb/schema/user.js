@@ -7,6 +7,7 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
   username: String,
   password: String,
+  openId: String, // 微信openId
   mobile: String,
   nickname: String,
   email: String,

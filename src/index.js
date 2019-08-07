@@ -71,6 +71,7 @@ app.use(async (ctx, next) => {
   }
   if (
     ctx.url.includes("login") ||
+    ctx.url.includes("register") ||
     ctx.url.includes("/show/") ||
     ctx.url.includes("/wechat") ||
     ctx.url.includes("/analytics")
