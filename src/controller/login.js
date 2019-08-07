@@ -12,16 +12,52 @@ import {
 } from "../service/wechat/oAuth";
 
 export async function login(ctx) {
-  const { username, password } = ctx.request.body;
+  const { username, password, openId } = ctx.request.body;
   // username password
-  const user = await findUserByUsername(username);
+  // openId 已绑定判断
+  let user;
+  user = await findUserByUsername(username);
+  // if (openId) {
+  //   user = await findUserByUsername(openId, username);
+
+  // } else {
+  //   user = await findUserByUsername(username);
+  // }
+
   console.log("login---", user);
   if (user && password === user.password) {
-    const token = encode({
-      id: user.id
-    });
-    console.log(token);
-    ctx.body = token;
+    if (openId) {
+      if (user.openId) {
+        console.log("x111111111", user.openId);
+        if (user.openId === openId) {
+          const token = encode({
+            id: user.id
+          });
+          console.log(token);
+          ctx.body = token;
+        } else {
+          ctx.throw({
+            statusCode: 200,
+            message: "该账号已绑定微信"
+          });
+        }
+      } else {
+        user.openId = openId;
+        // 保存
+        await user.save();
+        const token = encode({
+          id: user.id
+        });
+        console.log(token);
+        ctx.body = token;
+      }
+    } else {
+      const token = encode({
+        id: user.id
+      });
+      console.log(token);
+      ctx.body = token;
+    }
   } else {
     // 怎么处理 TODO
     ctx.throw({
@@ -36,6 +72,7 @@ export async function login(ctx) {
  * @param {*} ctx
  */
 export async function wechatLogin(ctx) {
+  console.log("微信登录");
   // const { code } = ctx.query;
   const code = ctx.request.query.code;
   console.log("------auth----" + code);

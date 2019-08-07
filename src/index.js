@@ -43,7 +43,7 @@ const fnResult = async (ctx, next) => {
   try {
     await next();
     // if (!ctx.url.includes("/graphql")) {
-    console.log("xxxxx", ctx.response.body);
+    console.log("数据处理", ctx.response.body);
     if (!ctx.url.includes("/wechat/wx")) {
       ctx.body = {
         code: 0,
@@ -71,6 +71,7 @@ app.use(async (ctx, next) => {
   }
   if (
     ctx.url.includes("login") ||
+    ctx.url.includes("wechatLogin") ||
     ctx.url.includes("register") ||
     ctx.url.includes("/show/") ||
     ctx.url.includes("/wechat") ||

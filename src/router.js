@@ -46,7 +46,7 @@ router.get("/getTranslate", getTranslate);
 router.get("/qiuToken", getToken);
 
 router.post("/login", login);
-router.post("/wechatLogin", wechatLogin);
+router.get("/wechatLogin", wechatLogin);
 router.post("/register", register);
 
 //user
