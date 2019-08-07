@@ -36,8 +36,10 @@ export async function login(ctx) {
  * @param {*} ctx
  */
 export async function wechatLogin(ctx) {
-  const { code } = ctx.query;
-  console.log(code);
+  // const { code } = ctx.query;
+  const code = ctx.request.query.code;
+  console.log("------auth----" + code);
+  // console.log(code);
   // 根据code获取openId
 
   // const code = ctx.request.query.code;
