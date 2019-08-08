@@ -29,7 +29,7 @@ import GraphqlRouter from "./router";
 import wechatRouter from "./controller/wechat";
 import analyticsRouter from "./controller/analytics";
 import bannerRouter from "./controller/banner";
-const resolve = require("path").resolve
+const resolve = require("path").resolve;
 
 
 const router = new Router();
@@ -37,7 +37,7 @@ const router = new Router();
 app.use(bodyParser());
 app.use(KoaStatic(__dirname + "/public"));
 
-const requirePath = path => resolve(__dirname,path)
+const requirePath = path => resolve(__dirname,path);
 const MIDDLEWARES = ["router"]
 
 const useMiddleWares = R.map(
@@ -47,7 +47,7 @@ const useMiddleWares = R.map(
     i => `${requirePath('./middlewares')}/${i}`
   )
 )
-useMiddleWares(MIDDLEWARES) 
+useMiddleWares(MIDDLEWARES);
 
 
 

@@ -10,6 +10,7 @@ require("./schema/wechat/menu");
 require("./schema/analytics/point");
 require("./schema/analytics/track");
 require("./schema/banner");
+require("./schema/captcha");
 // require("./schema/student");
 // 链接mongodb
 export const database = () => {
