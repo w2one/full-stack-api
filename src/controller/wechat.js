@@ -18,6 +18,8 @@ import { requestGetMunu, requestSetMenu } from "../service/wechat/menu";
 import { create } from "../service/wechat/qrcode.js";
 const getRawBody = require("raw-body");
 
+import config from "../config";
+
 import mongoose from "mongoose";
 const WechatMenu = mongoose.model("wechatMenu");
 
@@ -244,7 +246,7 @@ router.get("/wechat/wxShare", async ctx => {
   let signature = CryptoJS.SHA1(str).toString();
 
   let data = {
-    appId: config.appId,
+    appId: config.wechat.appId,
     timestamp: timestamp,
     nonceStr: nonce_str,
     signature: signature
