@@ -101,8 +101,7 @@ export async function wechatLogin(ctx) {
   const user = await User.findOne({
     openId: openid
   });
-  // 获取的微信信息保存到用户表
-  user = Object.assign(user, ...userInfo);
+
   if (user) {
     const token = encode({
       id: user.id
