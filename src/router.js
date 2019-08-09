@@ -2,7 +2,7 @@
  * router
  */
 import { graphqlKoa, graphiqlKoa } from "graphql-server-koa";
-import { login, register, wechatLogin } from "./controller/login";
+import { login, register, wechatLogin, getUserInfo } from "./controller/login";
 
 import { saveInfo, getInfo } from "./controller/info";
 import { getDictController, addDictController } from "./controller/dict";
@@ -45,6 +45,8 @@ router.get("/getTranslate", getTranslate);
 
 router.get("/qiuToken", getToken);
 
+router.post("/login", login);
+router.get("/userInfo", getUserInfo);
 router.post("/login", login);
 router.get("/wechatLogin", wechatLogin);
 router.post("/register", register);

@@ -98,15 +98,23 @@ export async function wechatLogin(ctx) {
   console.log("aaaaaaa", JSON.stringify(userInfo));
   // ctx.body = userInfo;
 
-  const user = await User.findOne({ openId: openid });
+  const user = await User.findOne({
+    openId: openid
+  });
+  // 获取的微信信息保存到用户表
+  user = Object.assign(user, ...userInfo);
   if (user) {
     const token = encode({
       id: user.id
     });
     console.log(token);
-    ctx.body = { token };
+    ctx.body = {
+      token
+    };
   } else {
-    ctx.body = { openId: openid };
+    ctx.body = {
+      openId: openid
+    };
   }
 }
 
@@ -115,23 +123,59 @@ export async function wechatLogin(ctx) {
  * @param {*} ctx
  */
 export async function register(ctx) {
-  const { username, password, openId = "" } = ctx.request.body;
+  const { mobile: username, password, code, openId = "" } = ctx.request.body;
+
+  // 验证手机验证码 先写死 666666
+  if (code !== "666666") {
+    ctx.throw({
+      statusCode: 200,
+      message: "手机验证码错误"
+    });
+  }
+
   const user = await findUserByUsername(username);
+
   if (user) {
     ctx.throw({
       statusCode: 200,
-      message: "账号已存在"
+      message: "手机号已存在"
     });
   } else {
     const newUser = new User({
       username,
       password,
-      openId
+      openId,
+      source: "client" //默认client端
     });
     //保存用户
     await newUser.save();
     ctx.body = {
       success: true
     };
+  }
+}
+
+/**
+ * 获取用户信息
+ * @param {*} ctx
+ */
+export async function getUserInfo(ctx) {
+  const userInfo = ctx.request.body.user;
+  console.log(userInfo);
+
+  const user = await User.findById({ _id: userInfo.id });
+  if (user) {
+    delete user.password;
+    const { username, headImgUrl = "" } = user;
+
+    ctx.body = {
+      username,
+      headImgUrl
+    };
+  } else {
+    ctx.throw({
+      statusCode: 200,
+      message: "未找到"
+    });
   }
 }
