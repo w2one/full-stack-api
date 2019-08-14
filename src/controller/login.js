@@ -94,8 +94,8 @@ export async function wechatLogin(ctx) {
   }
   console.log("xxxxxx", access_token, openid);
   //第四步：拉取用户信息(需scope为 snsapi_userinfo)
-  const userInfo = await requestAuthUserinfo(access_token, openid);
-  console.log("aaaaaaa", JSON.stringify(userInfo));
+  // const userInfo = await requestAuthUserinfo(access_token, openid);
+  // console.log("aaaaaaa", JSON.stringify(userInfo));
   // ctx.body = userInfo;
 
   const user = await User.findOne({
@@ -140,12 +140,24 @@ export async function register(ctx) {
       message: "手机号已存在"
     });
   } else {
-    const newUser = new User({
+    let newUser = new User({
       username,
       password,
       openId,
-      source: "client" //默认client端
+      source: "client" //默认client端,
     });
+    if (openId) {
+      const userInfo = await requestAuthUserinfo(access_token, openid);
+      console.log("userInfo ----", JSON.stringify(userInfo));
+      newUser = new User({
+        username,
+        password,
+        openId,
+        source: "client", //默认client端,
+        ...userInfo
+      });
+    }
+
     //保存用户
     await newUser.save();
     ctx.body = {
