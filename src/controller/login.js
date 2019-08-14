@@ -94,7 +94,7 @@ export async function wechatLogin(ctx) {
   }
   console.log("xxxxxx", access_token, openid);
   //第四步：拉取用户信息(需scope为 snsapi_userinfo)
-  // const userInfo = await requestAuthUserinfo(access_token, openid);
+  const userInfo = await requestAuthUserinfo(access_token, openid);
   // console.log("aaaaaaa", JSON.stringify(userInfo));
   // ctx.body = userInfo;
 
@@ -112,7 +112,8 @@ export async function wechatLogin(ctx) {
     };
   } else {
     ctx.body = {
-      openId: openid
+      openId: openid,
+      userInfo: userInfo
     };
   }
 }
@@ -122,7 +123,13 @@ export async function wechatLogin(ctx) {
  * @param {*} ctx
  */
 export async function register(ctx) {
-  const { mobile: username, password, code, openId = "" } = ctx.request.body;
+  const {
+    mobile: username,
+    password,
+    code,
+    openId = "",
+    ...rest
+  } = ctx.request.body;
 
   // 验证手机验证码 先写死 666666
   if (code !== "666666") {
@@ -140,23 +147,13 @@ export async function register(ctx) {
       message: "手机号已存在"
     });
   } else {
-    let newUser = new User({
+    const newUser = new User({
       username,
       password,
       openId,
-      source: "client" //默认client端,
+      source: "client", //默认client端,
+      ...rest
     });
-    if (openId) {
-      const userInfo = await requestAuthUserinfo(access_token, openid);
-      console.log("userInfo ----", JSON.stringify(userInfo));
-      newUser = new User({
-        username,
-        password,
-        openId,
-        source: "client", //默认client端,
-        ...userInfo
-      });
-    }
 
     //保存用户
     await newUser.save();
