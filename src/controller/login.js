@@ -43,6 +43,9 @@ export async function login(ctx) {
         }
       } else {
         user.openId = openId;
+        console.log("---------------------");
+        console.log(rest);
+        console.log("---------------------");
         user = Object.assign({}, user, ...rest);
         // 保存
         await user.save();
