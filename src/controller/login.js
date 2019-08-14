@@ -12,7 +12,7 @@ import {
 } from "../service/wechat/oAuth";
 
 export async function login(ctx) {
-  const { username, password, openId, ...rest } = ctx.request.body;
+  const { username, password, openId } = ctx.request.body;
   // username password
   // openId 已绑定判断
   let user;
@@ -43,10 +43,6 @@ export async function login(ctx) {
         }
       } else {
         user.openId = openId;
-        console.log("---------------------");
-        console.log(rest);
-        console.log("---------------------");
-        user = Object.assign({}, user, ...rest);
         // 保存
         await user.save();
         const token = encode({
