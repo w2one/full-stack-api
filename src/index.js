@@ -18,7 +18,7 @@ app.use(async (ctx, next) => {
   ctx.set("Access-Control-Max-Age", 3600 * 24);
   ctx.set("Access-Control-Allow-Credentials", true);
   //ctx.set("Access-Control-Allow-Headers", "*");
-  ctx.set("Access-Control-Allow-Headers", "token");//移动端需指定
+  ctx.set("Access-Control-Allow-Headers", "token,Content-Type");//移动端需指定
   
   await next();
 });
