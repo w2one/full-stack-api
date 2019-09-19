@@ -18,8 +18,8 @@ app.use(async (ctx, next) => {
   ctx.set("Access-Control-Max-Age", 3600 * 24);
   ctx.set("Access-Control-Allow-Credentials", true);
   //ctx.set("Access-Control-Allow-Headers", "*");
-  ctx.set("Access-Control-Allow-Headers", "token,Content-Type");//移动端需指定
-  
+  ctx.set("Access-Control-Allow-Headers", "token,Content-Type"); //移动端需指定
+
   await next();
 });
 
@@ -30,6 +30,7 @@ import GraphqlRouter from "./router";
 import wechatRouter from "./controller/wechat";
 import analyticsRouter from "./controller/analytics";
 import bannerRouter from "./controller/banner";
+import dakaRouter from "./controller/daka";
 
 const router = new Router();
 
@@ -77,7 +78,8 @@ app.use(async (ctx, next) => {
     ctx.url.includes("register") ||
     ctx.url.includes("/show/") ||
     ctx.url.includes("/wechat") ||
-    ctx.url.includes("/analytics")
+    ctx.url.includes("/analytics") ||
+    ctx.url.includes("/daka")
   ) {
     await next();
   } else {
@@ -108,6 +110,7 @@ router.use(GraphqlRouter.routes());
 router.use(wechatRouter.routes());
 router.use(analyticsRouter.routes());
 router.use(bannerRouter.routes());
+router.use(dakaRouter.routes());
 
 const port = 4000;
 app.listen(port, () => {
