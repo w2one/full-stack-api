@@ -13,7 +13,11 @@ import { sendMsg } from "../utils/dingding";
 router.post("/daka/save", async ctx => {
   const data = ctx.request.body;
   //   console.log("打卡", data);
-  sendMsg(data);
+  try {
+    sendMsg(data);
+  } catch (error) {
+    console.log("错误");
+  }
 
   const daka = new Daka(data);
   const result = await daka.save();
