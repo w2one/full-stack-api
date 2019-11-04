@@ -45,16 +45,16 @@ router.get("/test", (ctx, next) => {
 const fnResult = async (ctx, next) => {
   try {
     await next();
-    // if (!ctx.url.includes("/graphql")) {
-    console.log("数据处理", ctx.response.body);
-    if (!ctx.url.includes("/wechat/wx")) {
-      ctx.body = {
-        code: 0,
-        message: "success",
-        data: ctx.response.body
-      };
+    if (!ctx.url.includes("/graph")) {
+      console.log("数据处理", ctx.response.body);
+      if (!ctx.url.includes("/wechat/wx")) {
+        ctx.body = {
+          code: 0,
+          message: "success",
+          data: ctx.response.body
+        };
+      }
     }
-    // }
   } catch (err) {
     // console.log("xxxxxxxxxxxxxxx", err);
     // ctx.response.status = err.statusCode || err.status || 500;
@@ -79,7 +79,8 @@ app.use(async (ctx, next) => {
     ctx.url.includes("/show/") ||
     ctx.url.includes("/wechat") ||
     ctx.url.includes("/analytics") ||
-    ctx.url.includes("/daka")
+    ctx.url.includes("/daka") ||
+    ctx.url.includes("/graph")
   ) {
     await next();
   } else {

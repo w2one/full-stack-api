@@ -30,4 +30,14 @@ router.post("/daka/save", async ctx => {
   //   }
 });
 
+/**
+ * 打开数据全导出
+ */
+router.get("/daka/export", async ctx => {
+  // const data = ctx.request.body;
+  const result = await Daka.find({ longitude: { $gt: 1 } });
+  console.log(result);
+  ctx.body = result;
+});
+
 export default router;
