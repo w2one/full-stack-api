@@ -9,7 +9,13 @@ import { getDictController, addDictController } from "./controller/dict";
 // import { getBannerController, addBannerController } from "./controller/banner";
 import { findImage, findImages, saveImage } from "./controller/image";
 
-import { saveUser, findUser } from "./controller/user";
+import {
+  saveUser,
+  findUser,
+  queryUser,
+  deleteUser,
+  updateUser
+} from "./controller/user";
 
 import {
   saveShow,
@@ -31,6 +37,13 @@ import { getTranslate } from "./controller/translate";
 router.post("/saveinfo", saveInfo);
 router.get("/getInfo", getInfo);
 router.get("/dict", getDictController).get("/addDict", addDictController);
+
+// 查找用户
+router
+  .post("/user/query", queryUser)
+  .post("/user/save", saveUser)
+  .post("/user/delete", deleteUser)
+  .post("/user/update", updateUser);
 
 // image
 router
