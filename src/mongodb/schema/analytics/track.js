@@ -14,6 +14,10 @@ const TrackSchema = new Schema({
   lang: String, //语言
   ua: String, // ua
   ip: String, //ip
+  url: String,
+  method: String,
+  in: String,
+  out: String,
   createDate: { type: Date, default: Date.now() }
 });
 
