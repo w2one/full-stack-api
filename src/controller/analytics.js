@@ -74,4 +74,12 @@ router.post("/analytics/track/query", async ctx => {
   ctx.body = data;
 });
 
+/**
+ * 所有数据
+ */
+router.post("/analytics/track/all", async ctx => {
+  const data = await Track.find({});
+  ctx.body = data;
+});
+
 export default router;
