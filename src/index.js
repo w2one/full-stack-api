@@ -47,7 +47,10 @@ const fnResult = async (ctx, next) => {
     await next();
     if (!ctx.url.includes("/graph")) {
       console.log("数据处理", ctx.response.body);
-      if (!ctx.url.includes("/wechat/wx")) {
+      if (
+        !ctx.url.includes("/wechat/wx") &&
+        !ctx.url.includes("/analytics/track/exportexcel")
+      ) {
         ctx.body = {
           code: 0,
           message: "success",
@@ -80,7 +83,8 @@ app.use(async (ctx, next) => {
     ctx.url.includes("/wechat") ||
     ctx.url.includes("/analytics") ||
     ctx.url.includes("/daka") ||
-    ctx.url.includes("/graph")
+    ctx.url.includes("/graph") ||
+    ctx.url.includes("/analytics/track/exportexcel")
   ) {
     await next();
   } else {

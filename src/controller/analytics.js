@@ -6,6 +6,9 @@ import mongoose from "mongoose";
 const Point = mongoose.model("Point");
 const Track = mongoose.model("Track");
 
+import xlsx from "node-xlsx";
+const fs = require("fs");
+
 const router = require("koa-router")();
 
 /**
@@ -81,5 +84,52 @@ router.post("/analytics/track/all", async ctx => {
   const data = await Track.find({});
   ctx.body = data;
 });
+
+/**
+ * 导出excel
+ */
+router.get("/analytics/track/exportexcel2", async ctx => {
+  const data = [
+    [1, 2, 3],
+    [true, false, null, "sheetjs"],
+    ["foo", "bar", new Date("2014-02-19T14:30Z"), "0.3"],
+    ["baz", null, "qux"]
+  ];
+  const buffer = xlsx.build([{ name: "mySheetName", data: data }]);
+  // let buffer = await generateExcel();
+  ctx.set("Content-Type", "application/vnd.openxmlformats");
+  ctx.set("Content-Disposition", "attachment; filename=" + "Report.xlsx");
+  ctx.body = buffer; // 返回在响应体里
+});
+
+/**
+ * download excel
+ */
+router.get("/analytics/track/exportexcel", async ctx => {
+  const data = await Track.find({});
+  const array = data.reduce((acc, item) => {
+    acc.push([item.url, item.method, item.in, item.out]);
+    return acc;
+  }, []);
+
+  const buffer = xlsx.build([{ name: "mySheetName", data: array }]);
+  ctx.set("Content-Type", "application/vnd.openxmlformats");
+  ctx.set("Content-Disposition", "attachment; filename=" + "Report.xlsx");
+  ctx.body = buffer;
+});
+
+async function generateExcel() {
+  return new Promise(function(resolve, reject) {
+    const data = [
+      [1, 2, 3],
+      [true, false, null, "sheetjs"],
+      ["foo", "bar", new Date("2014-02-19T14:30Z"), "0.3"],
+      ["baz", null, "qux"]
+    ];
+    const buffer = xlsx.build([{ name: "mySheetName", data: data }]);
+
+    resolve(buffer);
+  });
+}
 
 export default router;
