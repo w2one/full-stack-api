@@ -64,6 +64,16 @@ router.get("/analytics/track", async ctx => {
 });
 
 /**
+ * 保存
+ */
+router.post("/analytics/track", async ctx => {
+  const data = ctx.request.body;
+  data.ip = getClientIP(ctx.req);
+  const track = new Track(data);
+  track.save();
+});
+
+/**
  * 轨迹查询
  * db.tracks.aggregate([{$group : {_id : "$current", total : {$sum : 1}}}])
 
