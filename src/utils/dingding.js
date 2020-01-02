@@ -5,7 +5,13 @@
 import axios from "axios";
 import config from "../config";
 
-export async function sendMsg({ nickName, avatarUrl, latitude, longitude }) {
+export async function sendMsg({
+  nickName,
+  avatarUrl,
+  latitude,
+  longitude,
+  addr = "未知"
+}) {
   let response = await axios.post(config.dingding, {
     msgtype: "markdown",
     markdown: {
@@ -16,10 +22,11 @@ export async function sendMsg({ nickName, avatarUrl, latitude, longitude }) {
         `- 昵称: ${nickName}\n` +
         `- 经度: ${longitude}\n` +
         `- 纬度: ${latitude}\n` +
+        `- 地址: ${addr}\n` +
         `- ${new Date().toLocaleString()}`
     }
   });
 
-  console.log(response);
+  // console.log(response);
   return response;
 }

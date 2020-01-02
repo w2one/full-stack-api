@@ -31,6 +31,7 @@ import wechatRouter from "./controller/wechat";
 import analyticsRouter from "./controller/analytics";
 import bannerRouter from "./controller/banner";
 import dakaRouter from "./controller/daka";
+import geoRouter from "./controller/geo";
 
 const router = new Router();
 
@@ -84,7 +85,8 @@ app.use(async (ctx, next) => {
     ctx.url.includes("/analytics") ||
     ctx.url.includes("/daka") ||
     ctx.url.includes("/graph") ||
-    ctx.url.includes("/analytics/track/exportexcel")
+    ctx.url.includes("/analytics/track/exportexcel") ||
+    ctx.url.includes("/geo")
   ) {
     await next();
   } else {
@@ -116,6 +118,7 @@ router.use(wechatRouter.routes());
 router.use(analyticsRouter.routes());
 router.use(bannerRouter.routes());
 router.use(dakaRouter.routes());
+router.use(geoRouter.routes());
 
 const port = 4000;
 app.listen(port, () => {

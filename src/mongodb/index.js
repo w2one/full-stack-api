@@ -11,6 +11,7 @@ require("./schema/analytics/point");
 require("./schema/analytics/track");
 require("./schema/banner");
 require("./schema/daka");
+require("./schema/geo");
 // require("./schema/student");
 // 链接mongodb
 export const database = () => {
